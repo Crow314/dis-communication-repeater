@@ -8,11 +8,12 @@ import (
 )
 
 func main() {
+	storeSize := flag.Int("s", 256, "remember packet identifications specified number of times")
 	flag.Parse()
 	tty := flag.Args()[0]
 
 	conn := connector.NewConnector(tty)
 	im920s := module.NewIm920s(conn.TransmitChannel(), conn.ReceiveChannel())
 
-	repeater.Run(im920s)
+	repeater.Run(im920s, *storeSize)
 }
