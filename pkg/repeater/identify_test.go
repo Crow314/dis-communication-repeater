@@ -44,3 +44,20 @@ func TestAddSize(t *testing.T) {
 		}
 	}
 }
+
+func TestCheckExistence(t *testing.T) {
+	size := 4
+	store := newIDStore(size)
+
+	for i := 0; i < size; i++ {
+		store.add([]byte{0x43, 0x72, 0x6F, 0x77, byte(i)})
+	}
+
+	if !store.checkExistence([]byte{0x43, 0x72, 0x6F, 0x77, 0x00}) {
+		t.Fatal("false negative")
+	}
+
+	if store.checkExistence([]byte{0x43, 0x72, 0x6F, 0x77, 0xFF}) {
+		t.Fatal("false positive")
+	}
+}

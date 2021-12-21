@@ -1,5 +1,7 @@
 package repeater
 
+import "bytes"
+
 type idStore struct {
 	storage [][]byte
 	size    int
@@ -23,4 +25,14 @@ func (store *idStore) add(id []byte) {
 		store.index++
 		store.index %= store.size
 	}
+}
+
+func (store *idStore) checkExistence(id []byte) bool {
+	for _, stored := range store.storage {
+		if bytes.Equal(id, stored) {
+			return true
+		}
+	}
+
+	return false
 }
