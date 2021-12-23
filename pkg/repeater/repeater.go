@@ -2,13 +2,18 @@ package repeater
 
 import "github.com/Crow314/im920s-controller/pkg/module"
 
-func Run(im920s *module.Im920s, storeSize int) {
-	go runner(im920s, storeSize)
+func Run(im920s *module.Im920s, detach bool, storeSize int) {
+	store := newIDStore(storeSize)
+
+	if detach { // background
+		go runner(im920s, store)
+	} else { // foreground
+		runner(im920s, store)
+	}
 }
 
-func runner(im920s *module.Im920s, storeSize int) {
+func runner(im920s *module.Im920s, store *idStore) {
 	receiver := im920s.DataReceiver()
-	store := newIDStore(storeSize)
 
 	for {
 		data := <-receiver
