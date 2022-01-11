@@ -33,5 +33,5 @@ Options
 	conn := connector.NewConnector(tty)
 	im920s := module.NewIm920s(conn.TransmitChannel(), conn.ReceiveChannel())
 
-	repeater.Run(im920s, false, *storeSize, *times, *interval)
+	repeater.Run(im920s, *storeSize, *times, *interval, nil)
 }
