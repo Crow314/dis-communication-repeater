@@ -5,17 +5,8 @@ import (
 	"time"
 )
 
-func Run(im920s *module.Im920s, detach bool, storeSize int, sendTimes int, interval int) {
+func Run(im920s *module.Im920s, storeSize int, sendTimes int, interval int) {
 	store := newIDStore(storeSize)
-
-	if detach { // background
-		go runner(im920s, store, sendTimes, interval)
-	} else { // foreground
-		runner(im920s, store, sendTimes, interval)
-	}
-}
-
-func runner(im920s *module.Im920s, store *idStore, times int, interval int) {
 	receiver := im920s.DataReceiver()
 
 	for {
@@ -27,7 +18,7 @@ func runner(im920s *module.Im920s, store *idStore, times int, interval int) {
 		}
 
 		store.add(data.Data())
-		go resend(data.Data(), im920s, times, interval)
+		go resend(data.Data(), im920s, sendTimes, interval)
 	}
 }
 
